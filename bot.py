@@ -1,5 +1,6 @@
 import discord
 import logging
+import sys
 
 logging.basicConfig(level=logging.INFO) #basic logging
 
@@ -13,17 +14,19 @@ client.login(creds[0], creds[1])
 
 @client.event
 def on_message(message):
+    if message.content.startswith('!schwehn-exit'):
+        print "Exiting ..."
+        sys.exit()
     if message.content.startswith('!listchannels'):
         channels = message.server.channels
         output = ""
         for c in channels:
             output = output + c.name + ": " + c.type + "\n"
         client.send_message(message.channel, output)
-    '''if message.content.startswith('!voice'):
-         voice = yield from client.join_voice_channel(channel)
+    if message.content.startswith('!voice'):
+         voice = yield from client.join_voice_channel(message.channel)
          player = voice.create_ffmpeg_player('cool.mp3')
          player.start()
-         '''
 
 
 @client.event
