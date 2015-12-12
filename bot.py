@@ -2,17 +2,21 @@ import discord
 import logging
 from tkinter import *
 
+def playSound(sound):
+    print(sound)
+
 root = Tk()
 root.title("Soundboard")
 
 headline = Label(text="All Sounds:")
-button1 = Button(text="John Cena")
-button2 = Button(text="Kevkedino")
+button1 = Button(text="John Cena", command=playSound("john"))
+button2 = Button(text="Kevkedino", command=playSound("kevke"))
 
 headline.pack()
 button1.pack()
 button2.pack()
 root.mainloop()
+
 
 
 logging.basicConfig(level=logging.INFO) #basic logging
