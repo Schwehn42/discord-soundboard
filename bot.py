@@ -15,7 +15,7 @@ client.login(creds[0], creds[1])
 @client.event
 def on_message(message):
     if message.content.startswith('!schwehn-exit'):
-        print "Exiting ..."
+        print('Exiting')
         sys.exit()
     if message.content.startswith('!listchannels'):
         channels = message.server.channels
