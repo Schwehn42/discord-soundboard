@@ -11,6 +11,11 @@ creds = open(__file__ + '/../' + 'credentials.txt','r').read() #get creds from f
 creds = creds.split("\n") #remove \n from pw
 client.login(creds[0], creds[1])
 
+
+print("kevin")
+print("dino")
+
+
 @client.event
 def on_message(message):
     if message.content.startswith('!test'):
@@ -24,3 +29,5 @@ def on_ready():
     print('------')
 
 client.run()
+
+
