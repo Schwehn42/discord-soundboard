@@ -13,8 +13,18 @@ client.login(creds[0], creds[1])
 
 @client.event
 def on_message(message):
-    if message.content.startswith('!test'):
-         client.send_message(message.channel, 'ayy lmao')
+    if message.content.startswith('!listchannels'):
+        channels = message.server.channels
+        output = ""
+        for c in channels:
+            output = output + c.name + ": " + c.type + "\n"
+        client.send_message(message.channel, output)
+    '''if message.content.startswith('!voice'):
+         voice = yield from client.join_voice_channel(channel)
+         player = voice.create_ffmpeg_player('cool.mp3')
+         player.start()
+         '''
+
 
 @client.event
 def on_ready():
