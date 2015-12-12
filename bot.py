@@ -1,5 +1,19 @@
 import discord
 import logging
+from tkinter import *
+
+root = Tk()
+root.title("Soundboard")
+
+headline = Label(text="All Sounds:")
+button1 = Button(text="John Cena")
+button2 = Button(text="Kevkedino")
+
+headline.pack()
+button1.pack()
+button2.pack()
+root.mainloop()
+
 
 logging.basicConfig(level=logging.INFO) #basic logging
 
@@ -11,6 +25,11 @@ creds = open(__file__ + '/../' + 'credentials.txt','r').read() #get creds from f
 creds = creds.split("\n") #remove \n from pw
 client.login(creds[0], creds[1])
 
+
+
+
+
+
 @client.event
 def on_ready():
     print('Logged in as')
@@ -19,3 +38,5 @@ def on_ready():
     print('------')
 
 client.run()
+
+
