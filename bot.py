@@ -12,7 +12,9 @@ client = discord.Client()
 creds = open(__file__ + '/../' + 'credentials.txt','r').read() #get creds from file
 creds = creds.split("\n") #remove \n from pw
 client.login(creds[0], creds[1])
-@client.event
+
+
+@client.async_event
 def on_message(message):
     if message.content.startswith('!schwehn-exit'):
         print('Exiting')
@@ -24,16 +26,23 @@ def on_message(message):
             output = output + c.name + ": " + c.type + "\n"
         client.send_message(message.channel, output)
     if message.content.startswith('!schwehn-join-test'):
-        loop = asyncio.get_event_loop()
-        # Blocking call which returns when the hello_world() coroutine is done
-        loop.run_until_complete(joinVoiceChannel(message.server))
-        loop.close()
+        #call that dirty slut of a function
+        joinVoiceChannel(message.server, "Kacken")
 
 
-async def joinVoiceChannel(server):
-    joinChannel = getChannelByName(server, "Kacken")
+def joinVoiceChannel(server, channelName):
+    '''
+    note: this is fucking retarded
+    might still output errors
+    works tho
+    '''
+    joinChannel = getChannelByName(server, channelName)
     print (joinChannel.name)
-    client.join_voice_channel(joinChannel)
+    #voiceClient = client.join_voice_channel(joinChannel)
+    loop = asyncio.get_event_loop() #the function that needs to be called is a corountine (gay)
+    # TL;DR Magic
+    loop.run_until_complete(client.join_voice_channel(joinChannel))
+    loop.close()
 
 def getChannelByName(server, name):
     channels = server.channels
@@ -42,11 +51,11 @@ def getChannelByName(server, name):
             return c
     return -1
 
-@client.event
+@client.async_event
 def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
     print('------')
 
-client.run()
+client.run(creds[0], creds[1])
