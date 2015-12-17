@@ -17,7 +17,13 @@ def main_task(): #login and connect
     yield from client.connect()
 
 @client.async_event
-def on_message(message):
+async def on_message(message):
+    parts = message.content.split()
+    cmd = parts[0]
+    if len(parts) >= 2:
+        param1 = parts[1]
+    if len(parts) >= 3:    
+        param2 = parts[2]
     if message.content.startswith('!schwehn-exit'):
         print('Exiting')
         sys.exit()
@@ -28,25 +34,14 @@ def on_message(message):
             output = output + c.name + ": " + c.type + "\n"
         client.send_message(message.channel, output)
     if message.content.startswith('!sjt'):
-        loop = asyncio.get_event_loop()
-        asyncio.ensure_future(joinVoiceChannel(message.server, "Kacken"))
-        loop.run_forever()
-        loop.close()
-        #await joinVoiceChannel(message.server, "Kacken")
+        await joinVoiceChannel(message.server, param1)
 
-
-
-def joinVoiceChannel(server, channelName):
-    '''
-    note: this is fucking retarded
-    might still output errors
-    works tho
-    '''
+async def joinVoiceChannel(server, channelName):
     joinChannel = getChannelByName(server, channelName)
 
     discord.opus.load_opus('opus.dll')
-    
-    yield from client.join_voice_channel(joinChannel)
+
+    await client.join_voice_channel(joinChannel)
 
 def getChannelByName(server, name):
     channels = server.channels
