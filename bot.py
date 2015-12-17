@@ -34,14 +34,18 @@ async def on_message(message):
             output = output + c.name + ": " + c.type + "\n"
         client.send_message(message.channel, output)
     if message.content.startswith('!sjt'):
-        await joinVoiceChannel(message.server, param1)
+        joinChannel = getChannelByName(message.server, param1)
+        if joinChannel == -1:
+            await client.send_message(message.channel, "Channel \'" + param1 + "\' doesn\'t exist")
+        else:    
+            await joinVoiceChannel(message.server, joinChannel)
 
-async def joinVoiceChannel(server, channelName):
-    joinChannel = getChannelByName(server, channelName)
+async def joinVoiceChannel(server, channel):
 
-    discord.opus.load_opus('opus.dll')
+    discord.opus.load_opus('opus.dll') #load opus (opus.dll is Win 64bit only)
 
-    await client.join_voice_channel(joinChannel)
+    #await client.disconnect() #disconnect from all voice connections
+    await client.join_voice_channel(channel) #join the new channel
 
 def getChannelByName(server, name):
     channels = server.channels
