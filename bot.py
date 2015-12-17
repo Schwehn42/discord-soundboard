@@ -11,8 +11,10 @@ client = discord.Client()
 #so its in a seperate file with the mail in the first and pw in the second line
 creds = open(__file__ + '/../' + 'credentials.txt','r').read() #get creds from file
 creds = creds.split("\n") #remove \n from pw
-client.login(creds[0], creds[1])
 
+def main_task(): #login and connect
+    yield from client.login(creds[0], creds[1])
+    yield from client.connect()
 
 @client.async_event
 def on_message(message):
@@ -58,4 +60,6 @@ def on_ready():
     print(client.user.id)
     print('------')
 
-client.run(creds[0], creds[1])
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main_task())
+loop.close()
