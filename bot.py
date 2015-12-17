@@ -27,9 +27,13 @@ def on_message(message):
         for c in channels:
             output = output + c.name + ": " + c.type + "\n"
         client.send_message(message.channel, output)
-    if message.content.startswith('!schwehn-join-test'):
-        #call that dirty slut of a function
-        joinVoiceChannel(message.server, "Kacken")
+    if message.content.startswith('!sjt'):
+        loop = asyncio.get_event_loop()
+        asyncio.ensure_future(joinVoiceChannel(message.server, "Kacken"))
+        loop.run_forever()
+        loop.close()
+        #await joinVoiceChannel(message.server, "Kacken")
+
 
 
 def joinVoiceChannel(server, channelName):
@@ -39,12 +43,10 @@ def joinVoiceChannel(server, channelName):
     works tho
     '''
     joinChannel = getChannelByName(server, channelName)
-    print (joinChannel.name)
-    #voiceClient = client.join_voice_channel(joinChannel)
-    loop = asyncio.get_event_loop() #the function that needs to be called is a corountine (gay)
-    # TL;DR Magic
-    loop.run_until_complete(client.join_voice_channel(joinChannel))
-    loop.close()
+
+    discord.opus.load_opus('opus.dll')
+    
+    yield from client.join_voice_channel(joinChannel)
 
 def getChannelByName(server, name):
     channels = server.channels
