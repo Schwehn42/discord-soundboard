@@ -1,51 +1,48 @@
 import discord
+from discord.voice_client import *
 import logging
-from tkinter import *
+import asyncio
 
-def playSound(sound):
-    print(sound)
-
-root = Tk()
-root.title("Soundboard")
-
-headline = Label(text="All Sounds:")
-button1 = Button(text="John Cena", command=playSound("john"))
-button2 = Button(text="Kevkedino", command=playSound("kevke"))
-
-headline.pack()
-button1.pack()
-button2.pack()
-root.mainloop()
-
-
-
-logging.basicConfig(level=logging.INFO) #basic logging
-
+#discordAPI
+logging.basicConfig(level=logging.INFO)
 client = discord.Client()
-
-#we dont want you (github) to see the credentials
-#so its in a seperate file with the mail in the first and pw in the second line
 creds = open(__file__ + '/../' + 'credentials.txt','r').read() #get creds from file
 creds = creds.split("\n") #remove \n from pw
 client.login(creds[0], creds[1])
 
+#loadOpus
+discord.opus.load_opus('opus.dll')
 
+@client.async_event
+async def on_message(message):
+    if message.content.startswith('!join'):
+        await join_voice_cmd(message, message.content.split()[1])
+    if message.content.startswith('!playsound'):
+        await playsound()
 
+async def join_voice_cmd(message, channel_name):
+        server = message.server
+        voice_channels = filter(lambda c: c.type is discord.enums.ChannelType.voice, server.channels)
+        if channel_name is not None:
+            voice_channel = discord.utils.find(lambda c: c.name == channel_name, voice_channels)
+        else:
+            voice_channel = next(voice_channels)
+        if not voice_channel:
+            await client.send_message(message.channel, 'Dieser Channel existiert nicht!')
+            return
 
+        voice = await client.join_voice_channel(voice_channel)
 
+async def playsound():
+        player = client.voice.create_ffmpeg_player('test.mp3')
+        player.start()
 
-@client.event
-def on_message(message):
-    if message.content.startswith('!test'):
-         client.send_message(message.channel, 'ayy lmao')
-
-@client.event
+@client.async_event
 def on_ready():
+
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
     print('------')
 
-client.run()
-
-
+client.run(creds[0], creds[1])
