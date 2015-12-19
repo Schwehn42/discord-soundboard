@@ -45,4 +45,4 @@ def on_ready():
     print(client.user.id)
     print('------')
 
-client.run(creds[0], creds[1])
+client.run(creds[0], creds[1]) #login
