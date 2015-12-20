@@ -22,7 +22,7 @@ async def on_message(message):
     cmd = parts[0]
     if len(parts) >= 2:
         param1 = parts[1]
-    if len(parts) >= 3:    
+    if len(parts) >= 3:
         param2 = parts[2]
     if message.content.startswith('!schwehn-exit'):
         print('Exiting')
@@ -37,8 +37,10 @@ async def on_message(message):
         joinChannel = getChannelByName(message.server, param1)
         if joinChannel == -1:
             await client.send_message(message.channel, "Channel \'" + param1 + "\' doesn\'t exist")
-        else:    
+        else:
             await joinVoiceChannel(message.server, joinChannel)
+    if message.content.startswith('!senpai'):
+        await client.send_file(message.channel, "senpai.jpg")
 
 async def joinVoiceChannel(server, channel):
 
